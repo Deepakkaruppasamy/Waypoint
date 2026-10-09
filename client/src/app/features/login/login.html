@@ -1,0 +1,110 @@
+<div class="login">
+  <aside class="pitch">
+    <div class="brand">
+      <app-logo [size]="36" background="#f4f1ea22" />
+      <span>Waypoint</span>
+    </div>
+
+    <div class="pitch-copy">
+      <h1>Every record,<br />in the right hands.</h1>
+      <p>
+        One sign-in, two roles. General users see their own work. Admins see everything and manage
+        who gets in.
+      </p>
+    </div>
+
+    <div class="demo">
+      <p class="demo-title">Demo accounts - click one to fill the form</p>
+      @for (account of demoAccounts; track account.userId) {
+        <button type="button" class="demo-account" (click)="useDemoAccount(account)">
+          <span class="demo-id">{{ account.userId }}</span>
+          <span class="demo-role">{{ account.role }}</span>
+          <span class="demo-note">{{ account.note }}</span>
+        </button>
+      }
+    </div>
+  </aside>
+
+  <main class="panel">
+    <form class="form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <p class="eyebrow">Welcome back</p>
+      <h2 class="form-title">Sign in to your workspace</h2>
+
+      @if (reason() === 'expired' && !errorMessage()) {
+        <div class="notice" role="status">
+          <mat-icon>schedule</mat-icon>
+          <span>Your session ended. Please sign in again.</span>
+        </div>
+      }
+
+      <mat-form-field>
+        <mat-label>User ID</mat-label>
+        <input matInput formControlName="userId" autocomplete="username" />
+        <mat-icon matPrefix>person</mat-icon>
+        @if (form.controls.userId.hasError('required')) {
+          <mat-error>Enter your user ID</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          autocomplete="current-password"
+          [type]="showPassword() ? 'text' : 'password'"
+        />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button
+          matSuffix
+          mat-icon-button
+          type="button"
+          [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+          (click)="showPassword.set(!showPassword())"
+        >
+          <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.password.hasError('required')) {
+          <mat-error>Enter your password</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="role">
+        <span class="role-label" id="role-label">Sign in as</span>
+        <mat-button-toggle-group
+          formControlName="role"
+          aria-labelledby="role-label"
+          hideSingleSelectionIndicator
+        >
+          @for (role of roles; track role) {
+            <mat-button-toggle [value]="role">{{ role }}</mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      </div>
+
+      @if (errorMessage(); as message) {
+        <div class="error-box" role="alert">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ message }}</span>
+        </div>
+      }
+
+      <button mat-flat-button class="submit" type="submit" [disabled]="submitting()">
+        @if (submitting()) {
+          <mat-spinner diameter="20" />
+          <span>Signing in…</span>
+        } @else {
+          <span>Sign in</span>
+        }
+      </button>
+
+      @if (latency.delayMs() > 0) {
+        <p class="hint">
+          <mat-icon>timer</mat-icon>
+          API responses are delayed by {{ latency.label() }} on purpose. Change it from the header
+          after signing in.
+        </p>
+      }
+    </form>
+  </main>
+</div>

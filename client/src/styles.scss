@@ -1,0 +1,241 @@
+@use '@angular/material' as mat;
+@use '@fontsource-variable/plus-jakarta-sans/wght.css';
+@use 'material-icons/iconfont/outlined.css';
+
+// ---------------------------------------------------------------------------
+// Design tokens. Components use these variables instead of hard-coded colours.
+// ---------------------------------------------------------------------------
+:root {
+  --wp-bg: #f4f1ea;
+  --wp-surface: #fffdf9;
+  --wp-ink: #17211f;
+  --wp-muted: #5c6b67;
+  --wp-line: #e3ddd0;
+  --wp-brand: #0e4a47;
+  --wp-brand-soft: #d9ebe6;
+  --wp-accent: #f0b45a;
+  --wp-accent-ink: #7a4a08;
+  --wp-accent-soft: #fbecd2;
+  --wp-danger: #b3402a;
+  --wp-danger-soft: #f8e1da;
+  --wp-ok: #1f7a54;
+  --wp-ok-soft: #dcf0e5;
+  --wp-radius: 18px;
+  --wp-shadow: 0 1px 2px rgb(23 33 31 / 6%), 0 8px 24px -12px rgb(23 33 31 / 18%);
+  --wp-font: 'Plus Jakarta Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+// ---------------------------------------------------------------------------
+// Angular Material theme (Material 3), recoloured to match the tokens above.
+// ---------------------------------------------------------------------------
+html {
+  color-scheme: light;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$cyan-palette,
+        tertiary: mat.$orange-palette,
+        theme-type: light,
+      ),
+      typography: (
+        plain-family: var(--wp-font),
+        brand-family: var(--wp-font),
+        bold-weight: 700,
+        medium-weight: 600,
+        regular-weight: 450,
+      ),
+      density: 0,
+    )
+  );
+  @include mat.theme-overrides(
+    (
+      primary: #0e4a47,
+      on-primary: #ffffff,
+      primary-container: #d9ebe6,
+      on-primary-container: #06302e,
+      secondary-container: #e4ede8,
+      on-secondary-container: #17211f,
+      background: #f4f1ea,
+      on-background: #17211f,
+      surface: #fffdf9,
+      on-surface: #17211f,
+      on-surface-variant: #5c6b67,
+      surface-container-lowest: #ffffff,
+      surface-container-low: #fbf8f2,
+      surface-container: #f8f5ee,
+      surface-container-high: #f3efe6,
+      surface-container-highest: #ede8dc,
+      outline: #a9a394,
+      outline-variant: #e3ddd0,
+      error: #b3402a,
+    )
+  );
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--wp-bg);
+  color: var(--wp-ink);
+  font-family: var(--wp-font);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.1rem);
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: inherit;
+}
+
+// ---------------------------------------------------------------------------
+// Small shared building blocks
+// ---------------------------------------------------------------------------
+.card {
+  background: var(--wp-surface);
+  border: 1px solid var(--wp-line);
+  border-radius: var(--wp-radius);
+  box-shadow: var(--wp-shadow);
+}
+
+.muted {
+  color: var(--wp-muted);
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--wp-muted);
+}
+
+.mono {
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, monospace;
+  font-size: 0.84em;
+}
+
+/* Pill-shaped labels: role, access level, record status */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: var(--wp-brand-soft);
+  color: var(--wp-brand);
+
+  &--accent {
+    background: var(--wp-accent-soft);
+    color: var(--wp-accent-ink);
+  }
+  &--ok {
+    background: var(--wp-ok-soft);
+    color: var(--wp-ok);
+  }
+  &--neutral {
+    background: #ece8de;
+    color: var(--wp-muted);
+  }
+  &--danger {
+    background: var(--wp-danger-soft);
+    color: var(--wp-danger);
+  }
+}
+
+/* Grey shimmering placeholder shown while data is on its way */
+.skeleton {
+  display: block;
+  height: 14px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ebe6db 25%, #f6f2ea 45%, #ebe6db 65%);
+  background-size: 300% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton,
+  .boot-bar::after {
+    animation: none;
+  }
+}
+
+.error-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--wp-danger-soft);
+  color: var(--wp-danger);
+  font-weight: 600;
+  font-size: 0.9rem;
+
+  mat-icon {
+    flex: none;
+  }
+}
+
+/* Lets wide tables scroll sideways on phones instead of breaking the page */
+.table-scroll {
+  overflow-x: auto;
+}
+
+.mat-mdc-table {
+  background: transparent !important;
+}
+
+.mat-mdc-header-cell {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wp-muted) !important;
+  white-space: nowrap;
+}
+
+.mat-mdc-snack-bar-container {
+  --mat-snack-bar-container-color: var(--wp-ink);
+  --mat-snack-bar-button-color: var(--wp-accent);
+}

@@ -1,0 +1,159 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgb(244 241 234 / 86%);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--wp-line);
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 18px;
+  font-size: 1.08rem;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 2px;
+
+  a {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 650;
+    font-size: 0.92rem;
+    color: var(--wp-muted);
+    text-decoration: none;
+    transition:
+      background 0.15s,
+      color 0.15s;
+
+    &:hover {
+      color: var(--wp-ink);
+      background: rgb(23 33 31 / 5%);
+    }
+
+    &.active {
+      color: var(--wp-brand);
+      background: var(--wp-brand-soft);
+    }
+  }
+}
+
+.spacer {
+  flex: 1;
+}
+
+.delay-button {
+  font-weight: 650;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 8px 5px 5px;
+  border: 1px solid var(--wp-line);
+  border-radius: 999px;
+  background: var(--wp-surface);
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--wp-brand);
+  }
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--wp-brand);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.account-text {
+  display: grid;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.account-name {
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+
+.account-role {
+  font-size: 0.72rem;
+  color: var(--wp-muted);
+}
+
+.menu-head {
+  display: grid;
+  padding: 8px 16px 12px;
+  border-bottom: 1px solid var(--wp-line);
+  margin-bottom: 4px;
+  font-size: 0.88rem;
+}
+
+.progress-slot {
+  height: 3px;
+
+  mat-progress-bar {
+    --mat-progress-bar-active-indicator-height: 3px;
+    --mat-progress-bar-track-height: 3px;
+    --mat-progress-bar-active-indicator-color: var(--wp-accent);
+    --mat-progress-bar-track-color: transparent;
+  }
+}
+
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+@media (max-width: 720px) {
+  .account-text,
+  .delay-text,
+  .brand span {
+    display: none;
+  }
+
+  .brand {
+    margin-right: 4px;
+  }
+
+  .topbar-inner {
+    padding: 8px 12px;
+    gap: 4px;
+  }
+
+  .page {
+    padding: 22px 14px 48px;
+  }
+}

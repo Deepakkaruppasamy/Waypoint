@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Waypoint</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    /* Shown until Angular has finished starting up (including the session check). */
+    .boot { position: fixed; inset: 0; display: grid; place-content: center; justify-items: center; gap: 18px;
+            background: #f4f1ea; color: #0e4a47; font: 600 15px system-ui, sans-serif; }
+    .boot-mark { width: 52px; height: 52px; border-radius: 16px; background: #0e4a47; display: grid; place-items: center; }
+    .boot-mark i { width: 18px; height: 18px; background: #f0b45a; transform: rotate(45deg); border-radius: 4px; }
+    .boot-bar { width: 160px; height: 4px; border-radius: 4px; background: #dcd6c8; overflow: hidden; }
+    .boot-bar::after { content: ''; display: block; width: 40%; height: 100%; border-radius: 4px; background: #0e4a47;
+                       animation: boot-slide 1.1s ease-in-out infinite; }
+    @keyframes boot-slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+  </style>
+</head>
+<body>
+  <app-root>
+    <div class="boot" role="status">
+      <div class="boot-mark"><i></i></div>
+      <span>Restoring your session…</span>
+      <div class="boot-bar"></div>
+    </div>
+  </app-root>
+</body>
+</html>

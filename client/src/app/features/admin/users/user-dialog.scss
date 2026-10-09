@@ -1,0 +1,31 @@
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 14px;
+  padding-top: 8px;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.error-box {
+  margin-top: 10px;
+}
+
+mat-spinner {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+  --mat-progress-spinner-active-indicator-color: currentColor;
+}
+
+@media (max-width: 520px) {
+  .fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,98 @@
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Administration</p>
+    <h1>Users</h1>
+    <p class="muted lead">Everyone who can sign in. Changes are saved to the database straight away.</p>
+  </div>
+  <button mat-flat-button (click)="add()" [disabled]="users.isLoading()">
+    <mat-icon>person_add</mat-icon>
+    Add user
+  </button>
+</header>
+
+<section class="card" [attr.aria-busy]="users.isLoading()">
+  @if (users.isLoading()) {
+    <div class="rows-skeleton">
+      @for (row of [1, 2, 3, 4]; track row) {
+        <span class="skeleton"></span>
+      }
+    </div>
+  } @else if (users.error(); as error) {
+    <div class="load-error">
+      <div class="error-box" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ describeError(error) }}</span>
+      </div>
+      <button mat-button (click)="users.reload()">Try again</button>
+    </div>
+  } @else if (users.value(); as list) {
+    <div class="table-scroll">
+      <table mat-table [dataSource]="list">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>User</th>
+          <td mat-cell *matCellDef="let user">
+            <div class="person">
+              <span class="avatar" [class.admin]="user.role === 'Admin'">{{ user.name | initials }}</span>
+              <div>
+                <p class="name">
+                  {{ user.name }}
+                  @if (isSelf(user)) {
+                    <span class="tag tag--neutral">You</span>
+                  }
+                </p>
+                <p class="mono muted">{{ user.userId }}</p>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="department">
+          <th mat-header-cell *matHeaderCellDef>Department</th>
+          <td mat-cell *matCellDef="let user">{{ user.department }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Role</th>
+          <td mat-cell *matCellDef="let user">
+            <span class="tag" [class.tag--accent]="user.role === 'Admin'">{{ user.role }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Added</th>
+          <td mat-cell *matCellDef="let user" class="date">{{ user.createdAt | date: 'd MMM y' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef><span class="sr-only">Actions</span></th>
+          <td mat-cell *matCellDef="let user" class="actions">
+            @if (deletingId() === user.id) {
+              <mat-spinner diameter="24" aria-label="Removing user" />
+            } @else {
+              <button mat-icon-button [attr.aria-label]="'Edit ' + user.name" matTooltip="Edit" (click)="edit(user)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                [attr.aria-label]="'Remove ' + user.name"
+                [matTooltip]="isSelf(user) ? 'You cannot remove your own account' : 'Remove'"
+                [disabled]="isSelf(user)"
+                (click)="remove(user)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+    </div>
+  }
+</section>

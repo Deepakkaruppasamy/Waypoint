@@ -1,0 +1,94 @@
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+
+.lead {
+  margin-top: 8px;
+}
+
+.card {
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  min-width: 760px;
+}
+
+td.mat-mdc-cell {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  background: var(--wp-brand-soft);
+  color: var(--wp-brand);
+  font-weight: 750;
+  font-size: 0.85rem;
+
+  &.admin {
+    background: var(--wp-accent-soft);
+    color: var(--wp-accent-ink);
+  }
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.date {
+  white-space: nowrap;
+  color: var(--wp-muted);
+}
+
+.actions {
+  text-align: right;
+  white-space: nowrap;
+
+  mat-spinner {
+    display: inline-block;
+    margin: 12px;
+  }
+}
+
+.rows-skeleton {
+  display: grid;
+  gap: 16px;
+  padding: 24px 22px;
+
+  .skeleton {
+    height: 40px;
+  }
+}
+
+.load-error {
+  padding: 22px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

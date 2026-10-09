@@ -1,0 +1,67 @@
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" routerLink="/dashboard" aria-label="Waypoint home">
+      <app-logo [size]="30" />
+      <span>Waypoint</span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      @if (auth.isAdmin()) {
+        <a routerLink="/admin/users" routerLinkActive="active">Users</a>
+      }
+    </nav>
+
+    <span class="spacer"></span>
+
+    <button
+      mat-button
+      class="delay-button"
+      [matMenuTriggerFor]="delayMenu"
+      matTooltip="Makes the API answer slowly so loading states are easy to see"
+    >
+      <mat-icon>timer</mat-icon>
+      <span class="delay-text">API delay: </span>{{ latency.label() }}
+    </button>
+    <mat-menu #delayMenu="matMenu" xPosition="before">
+      @for (option of latency.options; track option.ms) {
+        <button mat-menu-item (click)="latency.set(option.ms)">
+          <mat-icon>{{ option.ms === latency.delayMs() ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+          <span>{{ option.label }}</span>
+        </button>
+      }
+    </mat-menu>
+
+    @if (auth.user(); as user) {
+      <button class="account" [matMenuTriggerFor]="accountMenu" aria-label="Account menu">
+        <span class="avatar">{{ user.name | initials }}</span>
+        <span class="account-text">
+          <span class="account-name">{{ user.name }}</span>
+          <span class="account-role">{{ user.role }}</span>
+        </span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #accountMenu="matMenu" xPosition="before">
+        <div class="menu-head">
+          <strong>{{ user.name }}</strong>
+          <span class="muted">{{ user.email }}</span>
+        </div>
+        <button mat-menu-item (click)="signOut()">
+          <mat-icon>logout</mat-icon>
+          <span>Sign out</span>
+        </button>
+      </mat-menu>
+    }
+  </div>
+
+  <!-- Fixed-height slot, so the page does not jump when the bar appears. -->
+  <div class="progress-slot">
+    @if (activity.pendingCount() > 0) {
+      <mat-progress-bar mode="indeterminate" aria-label="Loading" />
+    }
+  </div>
+</header>
+
+<main class="page">
+  <router-outlet />
+</main>

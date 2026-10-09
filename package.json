@@ -1,0 +1,17 @@
+{
+  "name": "user-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Waypoint - Angular SPA with a Node/TypeScript API: login, role-based records, user management",
+  "scripts": {
+    "setup": "npm install && npm install --prefix server && npm install --prefix client",
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev --prefix server\" \"npm start --prefix client\"",
+    "build": "npm run build --prefix server && npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  }
+}

@@ -1,0 +1,59 @@
+<div class="table-scroll">
+  <table mat-table matSort [dataSource]="dataSource">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+      <td mat-cell *matCellDef="let record" class="mono">{{ record.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Record</th>
+      <td mat-cell *matCellDef="let record" class="title">{{ record.title }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+      <td mat-cell *matCellDef="let record">{{ record.category }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ownerId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Owner</th>
+      <td mat-cell *matCellDef="let record" class="mono">{{ record.ownerId }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="accessLevel">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Access level</th>
+      <td mat-cell *matCellDef="let record">
+        @if (record.accessLevel === 'Admin') {
+          <span class="tag tag--danger">Admin only</span>
+        } @else {
+          <span class="tag tag--neutral">General</span>
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <td mat-cell *matCellDef="let record">
+        <span class="tag" [class]="statusClass(record.status)">{{ record.status }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="updatedAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Updated</th>
+      <td mat-cell *matCellDef="let record" class="date">{{ record.updatedAt | date: 'd MMM y' }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns()"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns()"></tr>
+
+    <tr *matNoDataRow>
+      <td class="no-data" [attr.colspan]="columns().length">
+        @if (filter()) {
+          Nothing matches “{{ filter() }}”.
+        } @else {
+          There are no records for this account yet.
+        }
+      </td>
+    </tr>
+  </table>
+</div>

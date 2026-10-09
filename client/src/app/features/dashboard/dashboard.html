@@ -1,0 +1,156 @@
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Dashboard</p>
+    <h1>{{ greeting }}, {{ firstName() }}.</h1>
+    <p class="muted lead">
+      Your profile and your records are requested at the same time. Each card fills in when its own
+      response arrives.
+    </p>
+  </div>
+  <button mat-stroked-button (click)="reload()" [disabled]="loading()">
+    <mat-icon>refresh</mat-icon>
+    Reload data
+  </button>
+</header>
+
+<div class="grid">
+  <!-- ───────── Profile: GET /api/auth/me ───────── -->
+  <section class="card tile" aria-labelledby="profile-title" [attr.aria-busy]="profile.isLoading()">
+    <h2 id="profile-title">Your details</h2>
+
+    @if (profile.isLoading()) {
+      <div class="who">
+        <span class="skeleton avatar-skeleton"></span>
+        <div class="stack">
+          <span class="skeleton" style="width: 150px; height: 18px"></span>
+          <span class="skeleton" style="width: 90px"></span>
+        </div>
+      </div>
+      <div class="stack">
+        @for (width of [70, 85, 55, 65]; track $index) {
+          <span class="skeleton" [style.width.%]="width"></span>
+        }
+      </div>
+    } @else if (profile.error(); as error) {
+      <div class="error-box" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ describeError(error) }}</span>
+      </div>
+      <button mat-button (click)="profile.reload()">Try again</button>
+    } @else if (profile.value(); as user) {
+      <div class="who">
+        <span class="avatar">{{ user.name | initials }}</span>
+        <div>
+          <p class="name">{{ user.name }}</p>
+          <span class="tag" [class.tag--accent]="user.role === 'Admin'">{{ user.role }}</span>
+        </div>
+      </div>
+      <dl class="facts">
+        <div>
+          <dt>User ID</dt>
+          <dd class="mono">{{ user.userId }}</dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd>{{ user.email }}</dd>
+        </div>
+        <div>
+          <dt>Department</dt>
+          <dd>{{ user.department }}</dd>
+        </div>
+        <div>
+          <dt>Member since</dt>
+          <dd>{{ user.createdAt | date: 'd MMM y' }}</dd>
+        </div>
+      </dl>
+    }
+  </section>
+
+  <!-- ───────── Access level: derived from GET /api/records ───────── -->
+  <section class="card tile" aria-labelledby="access-title" [attr.aria-busy]="records.isLoading()">
+    <h2 id="access-title">Your access level</h2>
+
+    @if (records.isLoading()) {
+      <span class="skeleton" style="width: 60%; height: 34px"></span>
+      <span class="skeleton" style="height: 8px"></span>
+      <div class="stack">
+        @for (width of [80, 70, 75, 65]; track $index) {
+          <span class="skeleton" [style.width.%]="width"></span>
+        }
+      </div>
+    } @else if (records.error()) {
+      <p class="muted">Access details will appear once the records load.</p>
+    } @else if (records.value(); as data) {
+      <p class="count">
+        <strong>{{ data.access.visibleCount }}</strong>
+        <span class="muted">of {{ data.access.totalCount }} records visible to you</span>
+      </p>
+      <div
+        class="meter"
+        role="img"
+        [attr.aria-label]="percent(data.access.visibleCount, data.access.totalCount) + '% of all records'"
+      >
+        <span [style.width.%]="percent(data.access.visibleCount, data.access.totalCount)"></span>
+      </div>
+      <ul class="permissions">
+        @for (permission of permissions(); track permission.label) {
+          <li [class.denied]="!permission.allowed">
+            <mat-icon>{{ permission.allowed ? 'check_circle' : 'block' }}</mat-icon>
+            <span>{{ permission.label }}</span>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <!-- ───────── Live request log ───────── -->
+  <section class="card tile" aria-labelledby="activity-title">
+    <h2 id="activity-title">API activity</h2>
+    <p class="muted small">Newest first. Change the delay in the header, then press Reload data.</p>
+    <app-api-activity />
+  </section>
+
+  <!-- ───────── Records table: GET /api/records ───────── -->
+  <section class="card records" aria-labelledby="records-title" [attr.aria-busy]="records.isLoading()">
+    <div class="records-head">
+      <div>
+        <h2 id="records-title">{{ isAdmin() ? 'All records' : 'Your records' }}</h2>
+        <p class="muted small">
+          @if (isAdmin()) {
+            As an admin you see every user's records, including the ones marked “Admin only”.
+          } @else {
+            As a general user you see only the records you own. Admin-only records stay hidden.
+          }
+        </p>
+      </div>
+      <label class="search">
+        <mat-icon>search</mat-icon>
+        <input
+          type="search"
+          placeholder="Filter records"
+          aria-label="Filter records"
+          [value]="filter()"
+          (input)="filter.set($any($event.target).value)"
+        />
+      </label>
+    </div>
+
+    @if (records.isLoading()) {
+      <div class="rows-skeleton">
+        @for (row of [1, 2, 3, 4, 5]; track row) {
+          <span class="skeleton"></span>
+        }
+      </div>
+    } @else if (records.error(); as error) {
+      <div class="records-error">
+        <div class="error-box" role="alert">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ describeError(error) }}</span>
+        </div>
+        <button mat-button (click)="records.reload()">Try again</button>
+      </div>
+    } @else if (records.value(); as data) {
+      <app-records-table [records]="data.items" [filter]="filter()" [showOwner]="isAdmin()" />
+    }
+  </section>
+</div>

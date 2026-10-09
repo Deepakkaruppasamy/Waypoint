@@ -1,0 +1,28 @@
+table {
+  width: 100%;
+  min-width: 720px;
+}
+
+.mono {
+  white-space: nowrap;
+}
+
+.title {
+  min-width: 220px;
+  font-weight: 650;
+}
+
+.date {
+  white-space: nowrap;
+  color: var(--wp-muted);
+}
+
+.no-data {
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--wp-muted);
+}
+
+tr.mat-mdc-row:hover {
+  background: var(--mat-sys-surface-container);
+}
